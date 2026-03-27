@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #06111a;
+  --bg-elevated: rgba(10, 24, 36, 0.82);
+  --panel: rgba(8, 19, 30, 0.9);
+  --panel-border: rgba(123, 164, 198, 0.18);
+  --accent: #3dd7c4;
+  --accent-soft: rgba(61, 215, 196, 0.12);
+  --warning: #f59e0b;
+  --danger: #f97373;
+  --text: #d7e4ef;
+  --muted: #89a4b8;
+  --grid: rgba(137, 164, 184, 0.12);
+  --font-sans: "Space Grotesk", "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(circle at top left, rgba(61, 215, 196, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(97, 140, 255, 0.18), transparent 24%),
+    linear-gradient(180deg, #08141f 0%, #050c12 100%);
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  content: "";
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent);
+}
+
+.panel {
+  border: 1px solid var(--panel-border);
+  background: var(--panel);
+  box-shadow: 0 24px 80px rgba(2, 8, 15, 0.35);
+  backdrop-filter: blur(16px);
+}
+
+.panel-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.control-button {
+  border: 1px solid rgba(123, 164, 198, 0.22);
+  background: rgba(10, 24, 36, 0.78);
+  color: var(--text);
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.control-button:hover {
+  border-color: rgba(61, 215, 196, 0.48);
+  background: rgba(11, 28, 43, 0.94);
+  transform: translateY(-1px);
+}
+
+.control-button[data-active="true"] {
+  border-color: rgba(61, 215, 196, 0.7);
+  background: rgba(61, 215, 196, 0.18);
+}
+
+.metric-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.range-input {
+  width: 100%;
+  accent-color: var(--accent);
+}
