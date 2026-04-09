@@ -1,91 +1,60 @@
 "use client";
 
 import { AvatarCanvas } from "@/components/avatar/AvatarCanvas";
-import { PlaybackControls } from "@/components/avatar/PlaybackControls";
-import { TriggerModeSelector } from "@/components/translator/TriggerModeSelector";
 import { useTranslationContext } from "@/lib/state/TranslationContext";
 
+function IconButton({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: string;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className="group relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-[#131b29] text-sm text-[#9ab8ea] transition hover:border-[#6a91d8]/45 hover:text-white"
+      onClick={onClick}
+      type="button"
+    >
+      <span>{icon}</span>
+      <span className="pointer-events-none absolute right-[calc(100%+10px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-white/8 bg-[#111827] px-3 py-2 text-xs font-medium text-[#dbe7fb] shadow-[0_10px_24px_rgba(0,0,0,0.35)] group-hover:block">
+        {label}
+      </span>
+    </button>
+  );
+}
+
 export function AvatarWidget() {
-  const {
-    activeText,
-    debugOpen,
-    playbackSnapshot,
-    playCurrent,
-    resetPlayback,
-    setDebugOpen,
-    setSpeed,
-    setTriggerMode,
-    setWidgetOpen,
-    speed,
-    stopPlayback,
-    triggerMode,
-    widgetOpen,
-  } = useTranslationContext();
+  const { debugOpen, playCurrent, playbackSnapshot, resetPlayback, setDebugOpen, setWidgetOpen, stopPlayback, widgetOpen } =
+    useTranslationContext();
 
   if (!widgetOpen) {
     return (
       <button
-        className="fixed bottom-5 right-5 z-40 rounded-full border border-[var(--border-strong)] bg-[rgba(248,251,255,0.96)] px-4 py-3 text-sm font-semibold shadow-[var(--shadow)]"
+        className="fixed right-5 top-1/2 z-40 -translate-y-1/2 rounded-2xl border border-white/10 bg-[#121a27]/96 px-3 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-[#b7c8e6] shadow-[0_18px_44px_rgba(0,0,0,0.28)]"
         onClick={() => setWidgetOpen(true)}
         type="button"
       >
-        Abrir avatar
+        Avatar
       </button>
     );
   }
 
   return (
-    <aside className="soft-panel fixed bottom-4 right-4 z-40 flex w-[min(380px,calc(100vw-24px))] flex-col overflow-hidden rounded-[28px]">
-      <div className="flex items-start justify-between border-b border-[var(--border)] px-4 py-4">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Overlay LSC</p>
-          <h2 className="mt-1 text-xl font-semibold">Avatar contextual</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">{playbackSnapshot.activeLabel}</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            aria-label="Abrir panel debug"
-            className="rounded-full border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--muted)]"
-            onClick={() => setDebugOpen(!debugOpen)}
-            type="button"
-          >
-            Debug
-          </button>
-          <button
-            aria-label="Cerrar widget"
-            className="rounded-full border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--muted)]"
-            onClick={() => setWidgetOpen(false)}
-            type="button"
-          >
-            Cerrar
-          </button>
-        </div>
+    <aside className="fixed right-5 top-1/2 z-40 flex -translate-y-1/2 items-center gap-3">
+      <div className="flex flex-col gap-2">
+        <IconButton icon=">" label="Reproducir el plan actual" onClick={playCurrent} />
+        <IconButton icon="[]" label="Detener reproduccion" onClick={stopPlayback} />
+        <IconButton icon="R" label="Volver a postura neutral relajada" onClick={resetPlayback} />
+        <IconButton icon="i" label="Haz click en un titulo, texto o boton para activar el avatar" onClick={() => undefined} />
+        <IconButton icon="D" label={debugOpen ? "Ocultar panel debug" : "Mostrar panel debug"} onClick={() => setDebugOpen(!debugOpen)} />
+        <IconButton icon="x" label="Cerrar widget" onClick={() => setWidgetOpen(false)} />
       </div>
 
-      <div className="relative aspect-[5/6] overflow-hidden border-b border-[var(--border)] bg-[linear-gradient(180deg,#eef6ff_0%,#d8e7f8_100%)]">
-        <AvatarCanvas className="absolute inset-0" poseId={playbackSnapshot.currentPoseId} />
-      </div>
-
-      <div className="widget-scroll max-h-[44vh] space-y-4 overflow-y-auto px-4 py-4">
-        <div className="rounded-3xl bg-[rgba(248,251,255,0.92)] p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Texto activo</p>
-          <p className="mt-2 text-sm leading-6 text-[var(--text)]">{activeText || "Pasa el cursor, enfoca o haz click sobre un bloque relevante."}</p>
-        </div>
-
-        <TriggerModeSelector mode={triggerMode} onChange={setTriggerMode} />
-
-        <PlaybackControls onPlay={playCurrent} onReset={resetPlayback} onSpeedChange={setSpeed} onStop={stopPlayback} speed={speed} />
-
-        <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="rounded-2xl bg-[rgba(248,251,255,0.92)] p-3">
-            <div className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">Estado</div>
-            <div className="mt-1 font-semibold capitalize">{playbackSnapshot.status}</div>
-          </div>
-          <div className="rounded-2xl bg-[rgba(248,251,255,0.92)] p-3">
-            <div className="text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">Pasos</div>
-            <div className="mt-1 font-semibold">{Math.max(playbackSnapshot.queueLength, 0)}</div>
-          </div>
-        </div>
+      <div className="relative h-[372px] w-[212px] overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(22,31,46,0.98),rgba(15,22,34,0.96))] shadow-[0_28px_60px_rgba(0,0,0,0.35)]">
+        <AvatarCanvas className="absolute inset-0" poseId={playbackSnapshot.currentPoseId} variant="compact" />
       </div>
     </aside>
   );

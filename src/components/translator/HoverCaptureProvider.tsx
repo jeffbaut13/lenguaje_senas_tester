@@ -19,7 +19,7 @@ const INITIAL_SNAPSHOT: PlaybackSnapshot = {
 };
 
 export function HoverCaptureProvider({ children }: { children: React.ReactNode }) {
-  const [triggerMode, setTriggerMode] = useState<TriggerMode>("hover");
+  const [triggerMode, setTriggerMode] = useState<TriggerMode>("click");
   const [widgetOpen, setWidgetOpen] = useState(true);
   const [debugOpen, setDebugOpen] = useState(false);
   const [speed, setSpeed] = useState<number>(DEMO_CONFIG.playback.defaultSpeed);
@@ -68,26 +68,6 @@ export function HoverCaptureProvider({ children }: { children: React.ReactNode }
   }, [controller, speed]);
 
   useEffect(() => {
-    const handleHover = (event: Event) => {
-      if (triggerMode !== "hover") {
-        return;
-      }
-      const target = event.target instanceof HTMLElement ? event.target : null;
-      if (target) {
-        captureTextFromElement(target);
-      }
-    };
-
-    const handleFocus = (event: Event) => {
-      if (triggerMode !== "focus") {
-        return;
-      }
-      const target = event.target instanceof HTMLElement ? event.target : null;
-      if (target) {
-        captureTextFromElement(target);
-      }
-    };
-
     const handleClick = (event: Event) => {
       if (triggerMode !== "click") {
         return;
@@ -98,13 +78,9 @@ export function HoverCaptureProvider({ children }: { children: React.ReactNode }
       }
     };
 
-    document.addEventListener("mouseover", handleHover, true);
-    document.addEventListener("focusin", handleFocus, true);
     document.addEventListener("click", handleClick, true);
 
     return () => {
-      document.removeEventListener("mouseover", handleHover, true);
-      document.removeEventListener("focusin", handleFocus, true);
       document.removeEventListener("click", handleClick, true);
     };
   }, [captureTextFromElement, triggerMode]);

@@ -9,6 +9,28 @@ const baseArmature = {
   RightLowerArm: [0, 0, 0] as [number, number, number],
   LeftHand: [0, 0, 0] as [number, number, number],
   RightHand: [0, 0, 0] as [number, number, number],
+  LeftThumbMetacarpal: [0, 0, 0] as [number, number, number],
+  LeftThumbProximal: [0, 0, 0] as [number, number, number],
+  LeftThumbDistal: [0, 0, 0] as [number, number, number],
+  LeftIndexProximal: [0, 0, 0] as [number, number, number],
+  LeftIndexIntermediate: [0, 0, 0] as [number, number, number],
+  LeftMiddleProximal: [0, 0, 0] as [number, number, number],
+  LeftMiddleIntermediate: [0, 0, 0] as [number, number, number],
+  LeftRingProximal: [0, 0, 0] as [number, number, number],
+  LeftRingIntermediate: [0, 0, 0] as [number, number, number],
+  LeftLittleProximal: [0, 0, 0] as [number, number, number],
+  LeftLittleIntermediate: [0, 0, 0] as [number, number, number],
+  RightThumbMetacarpal: [0, 0, 0] as [number, number, number],
+  RightThumbProximal: [0, 0, 0] as [number, number, number],
+  RightThumbDistal: [0, 0, 0] as [number, number, number],
+  RightIndexProximal: [0, 0, 0] as [number, number, number],
+  RightIndexIntermediate: [0, 0, 0] as [number, number, number],
+  RightMiddleProximal: [0, 0, 0] as [number, number, number],
+  RightMiddleIntermediate: [0, 0, 0] as [number, number, number],
+  RightRingProximal: [0, 0, 0] as [number, number, number],
+  RightRingIntermediate: [0, 0, 0] as [number, number, number],
+  RightLittleProximal: [0, 0, 0] as [number, number, number],
+  RightLittleIntermediate: [0, 0, 0] as [number, number, number],
   Neck: [0, 0, 0] as [number, number, number],
   Head: [0, 0, 0] as [number, number, number],
   Chest: [0, 0, 0] as [number, number, number],
@@ -40,6 +62,31 @@ const pose = (
   },
 });
 
+const relaxedFingers = {
+  LeftThumbMetacarpal: [0, -18, -12] as [number, number, number],
+  LeftThumbProximal: [0, -30, -12] as [number, number, number],
+  LeftThumbDistal: [0, -22, -10] as [number, number, number],
+  LeftIndexProximal: [0, 0, -62] as [number, number, number],
+  LeftIndexIntermediate: [0, 0, -54] as [number, number, number],
+  LeftMiddleProximal: [0, 0, -66] as [number, number, number],
+  LeftMiddleIntermediate: [0, 0, -56] as [number, number, number],
+  LeftRingProximal: [0, 0, -60] as [number, number, number],
+  LeftRingIntermediate: [0, 0, -52] as [number, number, number],
+  LeftLittleProximal: [0, 0, -52] as [number, number, number],
+  LeftLittleIntermediate: [0, 0, -44] as [number, number, number],
+  RightThumbMetacarpal: [0, 18, 12] as [number, number, number],
+  RightThumbProximal: [0, 30, 12] as [number, number, number],
+  RightThumbDistal: [0, 22, 10] as [number, number, number],
+  RightIndexProximal: [0, 0, 62] as [number, number, number],
+  RightIndexIntermediate: [0, 0, 54] as [number, number, number],
+  RightMiddleProximal: [0, 0, 66] as [number, number, number],
+  RightMiddleIntermediate: [0, 0, 56] as [number, number, number],
+  RightRingProximal: [0, 0, 60] as [number, number, number],
+  RightRingIntermediate: [0, 0, 52] as [number, number, number],
+  RightLittleProximal: [0, 0, 52] as [number, number, number],
+  RightLittleIntermediate: [0, 0, 44] as [number, number, number],
+};
+
 const makeFingerPose = (char: string, index: number): PoseEntry =>
   pose(
     `FS_${char}`,
@@ -61,16 +108,41 @@ const makeFingerPose = (char: string, index: number): PoseEntry =>
   );
 
 export const poseLibrary: PoseEntry[] = [
-  pose("NEUTRAL", "Neutral", "Pose de reposo lista para iniciar una reproducción.", {}, ["base"], "base", 320, 0.2),
+  pose(
+    "NEUTRAL",
+    "Neutral",
+    "Pose de reposo con hombros y brazos cerrados al cuerpo.",
+    {
+      LeftShoulder: [10, 0, -2],
+      RightShoulder: [10, 0, 2],
+      LeftUpperArm: [34, -1, -2],
+      RightUpperArm: [34, 1, 2],
+      LeftLowerArm: [4, -1, -2],
+      RightLowerArm: [4, 1, 2],
+      LeftHand: [6, 0, -2],
+      RightHand: [6, 0, 2],
+      Chest: [1, 0, 0],
+      ...relaxedFingers,
+    },
+    ["base"],
+    "base",
+    320,
+    0.18,
+  ),
   pose(
     "REST",
     "Rest",
-    "Reposo suave con brazos más bajos.",
+    "Reposo suave para mantener la silueta natural entre reproducciones.",
     {
-      LeftUpperArm: [12, 0, -12],
-      RightUpperArm: [12, 0, 12],
-      LeftLowerArm: [-18, 0, -8],
-      RightLowerArm: [-18, 0, 8],
+      LeftShoulder: [12, 0, -2],
+      RightShoulder: [12, 0, 2],
+      LeftUpperArm: [30, -1, -2],
+      RightUpperArm: [30, 1, 2],
+      LeftLowerArm: [0, -1, -2],
+      RightLowerArm: [0, 1, 2],
+      LeftHand: [2, 0, -2],
+      RightHand: [2, 0, 2],
+      ...relaxedFingers,
     },
     ["base"],
     "base",
@@ -78,7 +150,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "OPEN_HAND_PRESENT",
     "Open Hand Present",
-    "Presentación amable del bloque activo.",
+    "Presentacion amable del bloque activo.",
     {
       LeftUpperArm: [-38, -12, -28],
       RightUpperArm: [-38, 12, 28],
@@ -96,7 +168,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "OPEN_HAND_EMPHASIS",
     "Open Hand Emphasis",
-    "Énfasis visual para ideas clave.",
+    "Enfasis visual para ideas clave.",
     {
       LeftUpperArm: [-50, -18, -34],
       RightUpperArm: [-50, 18, 34],
@@ -112,7 +184,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "POINT_LEFT",
     "Point Left",
-    "Señala un contenido o área a la izquierda.",
+    "Senala un contenido o area a la izquierda.",
     {
       LeftUpperArm: [-22, -10, -96],
       LeftLowerArm: [-20, 4, -20],
@@ -127,7 +199,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "POINT_RIGHT",
     "Point Right",
-    "Señala un contenido o área a la derecha.",
+    "Senala un contenido o area a la derecha.",
     {
       RightUpperArm: [-22, 10, 96],
       RightLowerArm: [-20, -4, 20],
@@ -156,7 +228,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "CHEST_TOUCH",
     "Chest Touch",
-    "Gestualidad de identidad o referencia al usuario.",
+    "Referencia al usuario o a la identidad del servicio.",
     {
       RightUpperArm: [-18, 8, 24],
       RightLowerArm: [-76, 0, -42],
@@ -185,7 +257,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "ATTENTION",
     "Attention",
-    "Lleva la atención hacia el contenido.",
+    "Lleva la atencion hacia el contenido.",
     {
       RightUpperArm: [-18, 6, 28],
       RightLowerArm: [-84, 0, -18],
@@ -200,7 +272,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "HERE",
     "Here",
-    "Indica el área actual o el cursor.",
+    "Indica el area actual o el cursor.",
     {
       RightUpperArm: [-34, 10, 52],
       RightLowerArm: [-92, 0, 18],
@@ -213,7 +285,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "LEARN",
     "Learn",
-    "Invitación a explorar y aprender.",
+    "Invitacion a explorar y aprender.",
     {
       LeftUpperArm: [-12, -4, -18],
       RightUpperArm: [-10, 10, 24],
@@ -227,7 +299,7 @@ export const poseLibrary: PoseEntry[] = [
   pose(
     "CONTACT",
     "Contact",
-    "Llamado a conversación o contacto.",
+    "Llamado a conversacion o contacto.",
     {
       RightUpperArm: [-14, 10, 18],
       RightLowerArm: [-72, 0, -30],
@@ -295,7 +367,7 @@ export const poseLibrary: PoseEntry[] = [
   ),
   pose("NEXT", "Next", "Paso siguiente dentro de una secuencia.", { RightUpperArm: [-32, 10, 44], RightLowerArm: [-44, 0, 10] }, ["navigation"], "base"),
   pose("BACK", "Back", "Vuelta al paso anterior.", { LeftUpperArm: [-32, -10, -44], LeftLowerArm: [-44, 0, -10] }, ["navigation"], "base"),
-  ...["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5"].map((char, index) =>
+  ...["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5"].map((char, index) =>
     makeFingerPose(char, index),
   ),
 ];

@@ -90,9 +90,7 @@ function AvatarModel({
   if (!loaded) {
     return (
       <Html center>
-        <div className="rounded-2xl border border-[var(--border)] bg-[rgba(248,251,255,0.94)] px-4 py-3 text-sm text-[var(--muted)]">
-          {status}
-        </div>
+        <div className="rounded-2xl border border-white/10 bg-[#131c2b]/94 px-4 py-3 text-sm text-[#93a7c5]">{status}</div>
       </Html>
     );
   }
@@ -103,33 +101,42 @@ function AvatarModel({
 export function AvatarCanvas({
   poseId,
   className = "",
+  variant = "default",
 }: {
   poseId: string;
   className?: string;
+  variant?: "default" | "compact";
 }) {
   const [ready, setReady] = useState(false);
+  const isCompact = variant === "compact";
+  const cameraPosition: [number, number, number] = isCompact ? [0, 1.08, 1.86] : [0, 1.28, DEMO_CONFIG.avatar.initialDistance];
+  const cameraTarget: [number, number, number] = isCompact ? [0, 0.96, 0] : [0, 1.12, 0];
 
   return (
     <div className={className}>
       <Canvas dpr={[1, 1.8]} gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}>
-        <color attach="background" args={["#e9f2fb"]} />
-        <fog attach="fog" args={["#e9f2fb", 3.4, 7]} />
+        <color attach="background" args={isCompact ? ["#111827"] : ["#0f1724"]} />
+        <fog attach="fog" args={isCompact ? ["#111827", 2.8, 5.6] : ["#0f1724", 3.4, 7]} />
         <Suspense fallback={null}>
-          <PerspectiveCamera makeDefault fov={28} position={[0, 1.28, DEMO_CONFIG.avatar.initialDistance]} />
-          <OrbitControls enablePan={false} enableZoom={false} minPolarAngle={1.2} maxPolarAngle={1.8} target={[0, 1.12, 0]} />
-          <ambientLight intensity={1.3} color="#f6fbff" />
-          <hemisphereLight args={["#ffffff", "#7a9ac0", 1.2]} />
-          <directionalLight position={[2.6, 3.8, 3]} intensity={1.7} color="#ffffff" />
-          <directionalLight position={[-2.8, 2.2, 2]} intensity={0.9} color="#c9e0ff" />
-          <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <circleGeometry args={[1.4, 48]} />
-            <meshStandardMaterial color="#dce8f5" />
-          </mesh>
+          <PerspectiveCamera makeDefault fov={isCompact ? 30 : 28} position={cameraPosition} />
+          {isCompact ? null : (
+            <OrbitControls enablePan={false} enableZoom={false} minPolarAngle={1.2} maxPolarAngle={1.8} target={cameraTarget} />
+          )}
+          <ambientLight intensity={1.2} color="#f2f7ff" />
+          <hemisphereLight args={["#ffffff", "#20314c", 1.15]} />
+          <directionalLight position={[2.6, 3.8, 3]} intensity={1.6} color="#ffffff" />
+          <directionalLight position={[-2.8, 2.2, 2]} intensity={0.8} color="#bcd7ff" />
+          {!isCompact ? (
+            <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+              <circleGeometry args={[1.4, 48]} />
+              <meshStandardMaterial color="#132033" />
+            </mesh>
+          ) : null}
           <AvatarModel poseId={poseId} onReady={setReady} />
         </Suspense>
       </Canvas>
-      {!ready ? null : (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 px-4 pb-3 text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
+      {!ready || isCompact ? null : (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 px-4 pb-3 text-[11px] uppercase tracking-[0.18em] text-[#7d90ae]">
           VRM playback procedural
         </div>
       )}

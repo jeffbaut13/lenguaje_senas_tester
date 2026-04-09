@@ -26,12 +26,12 @@ describe("DemoExperience", () => {
   it("renderiza la landing y el widget/avatar", () => {
     render(<DemoExperience />);
 
-    expect(screen.getByText(/Accesibilidad digital con traducción contextual en LSC/i)).toBeInTheDocument();
-    expect(screen.getByText(/Avatar contextual/i)).toBeInTheDocument();
+    expect(screen.getByText(/Traduce el contenido del sitio con un avatar accesible y contextual/i)).toBeInTheDocument();
+    expect(screen.getByText(/Contexto LSC/i)).toBeInTheDocument();
     expect(screen.getByTestId("avatar-canvas")).toBeInTheDocument();
   });
 
-  it("captura hover y genera semanticPlan, signPlan y playPlan", async () => {
+  it("captura click y genera semanticPlan, signPlan y playPlan", async () => {
     render(
       <HoverCaptureProvider>
         <section>
@@ -43,7 +43,7 @@ describe("DemoExperience", () => {
       </HoverCaptureProvider>,
     );
 
-    fireEvent.mouseOver(screen.getByText("Solicitar implementación"));
+    fireEvent.click(screen.getByText("Solicitar implementación"));
 
     await waitFor(() => {
       expect(screen.getByTestId("active-text")).toHaveTextContent("Solicitar implementación");
@@ -67,10 +67,10 @@ describe("DemoExperience", () => {
       </HoverCaptureProvider>,
     );
 
-    fireEvent.mouseOver(screen.getByText("Probar demo"));
+    fireEvent.click(screen.getByText("Probar demo"));
     await waitFor(() => expect(screen.getByTestId("active-text")).toHaveTextContent("Probar demo"));
 
-    fireEvent.mouseOver(screen.getByText("Hablar con soporte"));
+    fireEvent.click(screen.getByText("Hablar con soporte"));
     await waitFor(() => expect(screen.getByTestId("active-text")).toHaveTextContent("Hablar con soporte"));
   });
 });
