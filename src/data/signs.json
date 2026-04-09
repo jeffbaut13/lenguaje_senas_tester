@@ -1,0 +1,299 @@
+[
+  {
+    "id": "ACCESIBILIDAD",
+    "type": "sequence",
+    "label": "Accesibilidad",
+    "tags": ["accessibility", "landing"],
+    "domain": "accessibility",
+    "durationMs": 1500,
+    "sequence": [
+      { "kind": "pose", "poseId": "ACCESS", "durationMs": 520 },
+      { "kind": "pose", "poseId": "OPEN_HAND_PRESENT", "durationMs": 480 },
+      { "kind": "pause", "durationMs": 140 }
+    ],
+    "synonyms": ["accesibilidad", "acceso", "inclusion"],
+    "intents": ["inform"],
+    "metadata": { "placeholder": true, "notes": "Placeholder visual de demo, no seña final validada." }
+  },
+  {
+    "id": "LSC",
+    "type": "sequence",
+    "label": "LSC",
+    "tags": ["lsc", "sign-language"],
+    "domain": "accessibility",
+    "durationMs": 1160,
+    "sequence": [
+      { "kind": "pose", "poseId": "CHEST_TOUCH", "durationMs": 360 },
+      { "kind": "pose", "poseId": "WELCOME", "durationMs": 480 },
+      { "kind": "pause", "durationMs": 120 }
+    ],
+    "synonyms": ["lsc", "lengua de senas colombiana", "lengua de señas colombiana"],
+    "intents": ["inform"],
+    "metadata": { "placeholder": true, "notes": "Construcción funcional para demo." }
+  },
+  {
+    "id": "AYUDA",
+    "type": "pose",
+    "label": "Ayuda",
+    "tags": ["support"],
+    "domain": "support",
+    "durationMs": 620,
+    "poseId": "HELP",
+    "synonyms": ["ayuda", "acompanamiento", "acompañamiento"],
+    "intents": ["support"]
+  },
+  {
+    "id": "SOPORTE",
+    "type": "pose",
+    "label": "Soporte",
+    "tags": ["support"],
+    "domain": "support",
+    "durationMs": 620,
+    "poseId": "HELP",
+    "synonyms": ["soporte", "acompaña", "acompanar"],
+    "intents": ["support"]
+  },
+  {
+    "id": "APRENDER",
+    "type": "pose",
+    "label": "Aprender",
+    "tags": ["education"],
+    "domain": "education",
+    "durationMs": 620,
+    "poseId": "LEARN",
+    "synonyms": ["aprender", "aprendizaje", "conocer"],
+    "intents": ["learn"]
+  },
+  {
+    "id": "SITIO",
+    "type": "pose",
+    "label": "Sitio",
+    "tags": ["site"],
+    "domain": "general",
+    "durationMs": 560,
+    "poseId": "POINT_CENTER",
+    "synonyms": ["sitio", "plataforma", "pagina", "página", "portal"],
+    "intents": ["inform", "integrate"]
+  },
+  {
+    "id": "TRADUCIR",
+    "type": "sequence",
+    "label": "Traducir",
+    "tags": ["translation"],
+    "domain": "accessibility",
+    "durationMs": 1220,
+    "sequence": [
+      { "kind": "pose", "poseId": "OPEN_HAND_EMPHASIS", "durationMs": 420 },
+      { "kind": "pose", "poseId": "POINT_RIGHT", "durationMs": 420 },
+      { "kind": "pause", "durationMs": 120 }
+    ],
+    "synonyms": ["traducir", "traduccion", "traducción", "interpretar"],
+    "intents": ["inform", "support"]
+  },
+  {
+    "id": "AQUI",
+    "type": "pose",
+    "label": "Aquí",
+    "tags": ["location"],
+    "domain": "global",
+    "durationMs": 420,
+    "poseId": "HERE",
+    "synonyms": ["aqui", "aquí", "esta zona", "este bloque"],
+    "intents": ["cta", "navigate"]
+  },
+  {
+    "id": "CONTACTO",
+    "type": "pose",
+    "label": "Contacto",
+    "tags": ["support", "sales"],
+    "domain": "support",
+    "durationMs": 620,
+    "poseId": "CONTACT",
+    "synonyms": ["contacto", "hablar", "escribir"],
+    "intents": ["contact", "support"]
+  },
+  {
+    "id": "COMPRAR",
+    "type": "pose",
+    "label": "Comprar",
+    "tags": ["commerce"],
+    "domain": "commerce",
+    "durationMs": 620,
+    "poseId": "BUY",
+    "synonyms": ["comprar", "adquirir", "cotizar"],
+    "intents": ["cta"]
+  },
+  {
+    "id": "DESCARGAR",
+    "type": "pose",
+    "label": "Descargar",
+    "tags": ["download"],
+    "domain": "general",
+    "durationMs": 620,
+    "poseId": "DOWNLOAD",
+    "synonyms": ["descargar", "bajar"],
+    "intents": ["cta"]
+  },
+  {
+    "id": "VER",
+    "type": "pose",
+    "label": "Ver",
+    "tags": ["observe"],
+    "domain": "general",
+    "durationMs": 520,
+    "poseId": "ATTENTION",
+    "synonyms": ["ver", "revisar", "explorar"],
+    "intents": ["observe", "cta"]
+  },
+  {
+    "id": "SIGUIENTE",
+    "type": "pose",
+    "label": "Siguiente",
+    "tags": ["navigation"],
+    "domain": "general",
+    "durationMs": 520,
+    "poseId": "NEXT",
+    "synonyms": ["siguiente", "continuar", "avanzar"],
+    "intents": ["navigate"]
+  },
+  {
+    "id": "VOLVER",
+    "type": "pose",
+    "label": "Volver",
+    "tags": ["navigation"],
+    "domain": "general",
+    "durationMs": 520,
+    "poseId": "BACK",
+    "synonyms": ["volver", "regresar", "atras", "atrás"],
+    "intents": ["navigate"]
+  },
+  {
+    "id": "INTEGRACION",
+    "type": "sequence",
+    "label": "Integración",
+    "tags": ["integration"],
+    "domain": "integration",
+    "durationMs": 1220,
+    "sequence": [
+      { "kind": "pose", "poseId": "POINT_LEFT", "durationMs": 360 },
+      { "kind": "pose", "poseId": "POINT_RIGHT", "durationMs": 360 },
+      { "kind": "pose", "poseId": "OPEN_HAND_PRESENT", "durationMs": 320 }
+    ],
+    "synonyms": ["integracion", "integración", "embebible", "embed"],
+    "intents": ["integrate"]
+  },
+  {
+    "id": "IMPLEMENTACION",
+    "type": "sequence",
+    "label": "Implementación",
+    "tags": ["implementation"],
+    "domain": "integration",
+    "durationMs": 1180,
+    "sequence": [
+      { "kind": "pose", "poseId": "OPEN_HAND_EMPHASIS", "durationMs": 360 },
+      { "kind": "pose", "poseId": "POINT_CENTER", "durationMs": 440 },
+      { "kind": "pause", "durationMs": 120 }
+    ],
+    "synonyms": ["implementacion", "implementación", "despliegue"],
+    "intents": ["implement"]
+  },
+  {
+    "id": "CTA_PRESENT",
+    "type": "sequence",
+    "label": "CTA Present",
+    "tags": ["cta"],
+    "domain": "global",
+    "durationMs": 860,
+    "sequence": [
+      { "kind": "pose", "poseId": "OPEN_HAND_PRESENT", "durationMs": 380 },
+      { "kind": "pose", "poseId": "HERE", "durationMs": 260 }
+    ],
+    "synonyms": ["cta-present"],
+    "intents": ["cta"]
+  },
+  {
+    "id": "CTA_CONFIRM",
+    "type": "sequence",
+    "label": "CTA Confirm",
+    "tags": ["cta"],
+    "domain": "global",
+    "durationMs": 920,
+    "sequence": [
+      { "kind": "pose", "poseId": "OPEN_HAND_EMPHASIS", "durationMs": 300 },
+      { "kind": "pose", "poseId": "POINT_CENTER", "durationMs": 320 }
+    ],
+    "synonyms": ["cta-confirm"],
+    "intents": ["cta", "implement"]
+  },
+  {
+    "id": "CTA_LEARN_MORE",
+    "type": "sequence",
+    "label": "CTA Learn More",
+    "tags": ["cta", "education"],
+    "domain": "education",
+    "durationMs": 980,
+    "sequence": [
+      { "kind": "pose", "poseId": "LEARN", "durationMs": 360 },
+      { "kind": "pose", "poseId": "NEXT", "durationMs": 260 }
+    ],
+    "synonyms": ["cta-learn-more"],
+    "intents": ["learn", "cta"]
+  },
+  {
+    "id": "INFO_EMPHASIS",
+    "type": "sequence",
+    "label": "Info Emphasis",
+    "tags": ["info"],
+    "domain": "global",
+    "durationMs": 920,
+    "sequence": [
+      { "kind": "pose", "poseId": "ATTENTION", "durationMs": 300 },
+      { "kind": "pose", "poseId": "OPEN_HAND_EMPHASIS", "durationMs": 340 }
+    ],
+    "synonyms": ["info-emphasis"],
+    "intents": ["inform"]
+  },
+  {
+    "id": "HERE_CLICK",
+    "type": "sequence",
+    "label": "Here Click",
+    "tags": ["cta"],
+    "domain": "global",
+    "durationMs": 780,
+    "sequence": [
+      { "kind": "pose", "poseId": "HERE", "durationMs": 240 },
+      { "kind": "pose", "poseId": "POINT_CENTER", "durationMs": 260 }
+    ],
+    "synonyms": ["here-click"],
+    "intents": ["cta"]
+  },
+  {
+    "id": "SUPPORT_CONTACT",
+    "type": "sequence",
+    "label": "Support Contact",
+    "tags": ["support"],
+    "domain": "support",
+    "durationMs": 980,
+    "sequence": [
+      { "kind": "pose", "poseId": "HELP", "durationMs": 360 },
+      { "kind": "pose", "poseId": "CONTACT", "durationMs": 320 }
+    ],
+    "synonyms": ["support-contact"],
+    "intents": ["support", "contact"]
+  },
+  {
+    "id": "ACCESSIBILITY_PRESENTATION",
+    "type": "sequence",
+    "label": "Accessibility Presentation",
+    "tags": ["accessibility", "hero"],
+    "domain": "accessibility",
+    "durationMs": 1480,
+    "sequence": [
+      { "kind": "pose", "poseId": "WELCOME", "durationMs": 320 },
+      { "kind": "pose", "poseId": "ACCESS", "durationMs": 420 },
+      { "kind": "pose", "poseId": "OPEN_HAND_PRESENT", "durationMs": 360 }
+    ],
+    "synonyms": ["accessibility-presentation"],
+    "intents": ["inform"]
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "PHRASE_ACCESSIBILITY_CONTEXTUAL",
+    "phrase": "accesibilidad digital con traducción contextual en lsc",
+    "normalized": "accesibilidad digital con traduccion contextual en lsc",
+    "signIds": ["ACCESSIBILITY_PRESENTATION", "LSC", "TRADUCIR"],
+    "domain": "accessibility",
+    "intent": "inform",
+    "tags": ["hero", "landing"]
+  },
+  {
+    "id": "PHRASE_EMBED_WIDGET",
+    "phrase": "widget embebible para traducir contenido relevante",
+    "normalized": "widget embebible para traducir contenido relevante",
+    "signIds": ["SITIO", "AQUI", "TRADUCIR"],
+    "domain": "integration",
+    "intent": "integrate",
+    "tags": ["widget", "integration"]
+  },
+  {
+    "id": "PHRASE_REQUEST_IMPLEMENTATION",
+    "phrase": "solicitar implementacion",
+    "normalized": "solicitar implementacion",
+    "signIds": ["CTA_CONFIRM", "IMPLEMENTACION", "CONTACTO"],
+    "domain": "integration",
+    "intent": "implement",
+    "tags": ["cta"]
+  },
+  {
+    "id": "PHRASE_PROBAR_DEMO",
+    "phrase": "probar demo",
+    "normalized": "probar demo",
+    "signIds": ["CTA_PRESENT", "VER", "AQUI"],
+    "domain": "general",
+    "intent": "cta",
+    "tags": ["cta", "demo"]
+  },
+  {
+    "id": "PHRASE_VER_INTEGRACION",
+    "phrase": "ver integracion",
+    "normalized": "ver integracion",
+    "signIds": ["VER", "INTEGRACION"],
+    "domain": "integration",
+    "intent": "integrate",
+    "tags": ["cta"]
+  },
+  {
+    "id": "PHRASE_SUPPORT_CONTACT",
+    "phrase": "hablar con soporte",
+    "normalized": "hablar con soporte",
+    "signIds": ["SUPPORT_CONTACT", "CONTACTO"],
+    "domain": "support",
+    "intent": "support",
+    "tags": ["support"]
+  }
+]

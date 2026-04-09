@@ -1,0 +1,7 @@
+[
+  { "id": "DEFAULT_NEUTRAL", "from": "ANY", "to": "NEUTRAL", "durationMs": 240, "easing": "easeInOut" },
+  { "id": "HAND_TO_POINT", "from": "OPEN_HAND_PRESENT", "to": "POINT_CENTER", "durationMs": 180, "easing": "easeInOut" },
+  { "id": "POINT_SIDE_SWAP", "from": "POINT_LEFT", "to": "POINT_RIGHT", "durationMs": 220, "easing": "easeInOut" },
+  { "id": "EMPHASIS_TO_PRESENT", "from": "OPEN_HAND_EMPHASIS", "to": "OPEN_HAND_PRESENT", "durationMs": 180, "easing": "easeInOut" },
+  { "id": "ATTENTION_TO_HELP", "from": "ATTENTION", "to": "HELP", "durationMs": 200, "easing": "easeInOut" }
+]

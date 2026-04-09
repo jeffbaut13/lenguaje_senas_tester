@@ -1,45 +1,140 @@
-# VRM Human Tracking Lab
+# Contexto LSC Demo
 
-Aplicación en Next.js para capturar pose humana desde webcam en cliente, detectar cuerpo con `@vladmandic/human` y transferir torso, cabeza y brazos a un avatar `.vrm` usando `three` + `@pixiv/three-vrm`.
+Demo funcional de accesibilidad para sitios web con captura contextual del DOM, planificación semántica local y reproducción visual en un avatar VRM flotante.
 
-## Qué hace
+## Qué cambió
 
-- Pide permiso de cámara desde el navegador.
-- Muestra preview de video con overlay de landmarks 2D.
-- Carga un avatar VRM desde `public/avatar/avatar.vrm`.
-- Ejecuta inferencia solo del lado cliente.
-- Separa render loop y detection loop para sostener fluidez.
-- Aplica smoothing, confidence gating, hold-last-stable-pose, dead zones y decay a rest pose.
-- Prioriza estabilidad de torso, cabeza y brazos sobre cobertura total del cuerpo.
+Este repositorio ya no está orientado a webcam, pose tracking humano ni MediaPipe como flujo principal. La experiencia principal ahora sigue esta cadena:
 
-## Instalar
+`DOM/texto -> semanticPlan -> signPlan -> playPlan -> avatar`
 
-```bash
-npm install
-```
+La demo abre sin pedir permisos del navegador y responde a `hover`, `focus` o `click` sobre títulos, párrafos cortos, chips y CTAs relevantes.
 
-## Ejecutar
+## Arquitectura
 
-```bash
-npm run dev
-```
+### 1. DOM capture layer
 
-Abre `http://localhost:3000`.
+- `src/lib/dom/findSemanticContainer.ts`
+- `src/lib/dom/extractSemanticTextFromElement.ts`
 
-## Cómo poner el avatar
+Reconstruye texto aunque esté fragmentado en spans o nodos inline y sube al contenedor semántico más útil.
 
-1. Copia tu archivo VRM en `public/avatar/avatar.vrm`.
-2. Si quieres cambiar la ruta central, edita `src/lib/config/appConfig.ts`.
+### 2. Normalization layer
 
-## Limitaciones actuales
+- `src/lib/translation/normalizeText.ts`
 
-- Fase 1 prioriza torso, cabeza, hombros y brazos.
-- Dedos, expresiones, mirada y lip sync quedan preparados para una siguiente iteración.
-- `Human` todavía corre en main thread, aunque el proyecto ya separa configuración, cliente y loop para moverlo a worker.
-- La estabilidad depende mucho de iluminación, contraste y visibilidad clara de hombros, codos y muñecas.
+Normaliza espacios, minúsculas y diacríticos para matching robusto sin tocar el texto visible.
 
-## Próximos pasos sugeridos
+### 3. Semantic layer
 
-- Migrar inferencia a worker con `ImageBitmap` u `OffscreenCanvas`.
-- Añadir calibración inicial por usuario/avatar.
-- Integrar manos y face tracking cuando el torso ya esté estabilizado en tu hardware.
+- `src/lib/translation/translateTextToSemanticPlan.ts`
+- `src/lib/translation/classifyIntent.ts`
+- `src/lib/translation/extractEntities.ts`
+
+Produce `semanticPlan` con `sourceText`, `normalizedText`, `domain`, `intent`, `entities`, `confidence` y notas.
+
+### 4. Sign planning layer
+
+- `src/lib/sign-engine/resolvePhrasePlan.ts`
+- `src/lib/sign-engine/resolveTokenPlan.ts`
+- `src/lib/sign-engine/buildSignPlanFromSemanticPlan.ts`
+
+Prioriza:
+
+1. frase conocida
+2. match por intención
+3. tokens útiles
+4. fallback de fingerspelling
+
+### 5. Playback layer
+
+- `src/lib/sign-engine/buildPlayPlan.ts`
+- `src/lib/playback/AvatarPlaybackController.ts`
+
+Convierte el `signPlan` a una cola con pasos `pose`, `transition`, `pause` y `fingerspell`, soportando reemplazo limpio de reproducción.
+
+### 6. Avatar execution layer
+
+- `src/components/avatar/AvatarCanvas.tsx`
+- `src/lib/playback/poseResolver.ts`
+- `src/lib/vrm/*`
+
+Reutiliza la carga VRM y el rig del laboratorio anterior. La reproducción actual es procedural y placeholder, con `AnimationMixer` ya montado para futuras capas de clips reales.
+
+## Landing y páginas
+
+- `/`
+  Landing demo original, desktop-first, inspirada en composición editorial premium con tonos gris claro, crema y acento naranja cálido.
+- `/dev/pose-library`
+  Página interna para revisar poses, probar texto libre y ver `semanticPlan`, `signPlan` y `playPlan`.
+
+## Controles de la demo
+
+El widget flotante permite:
+
+- abrir/cerrar overlay
+- `play`, `stop`, `reset`
+- cambiar velocidad
+- alternar trigger mode entre `hover`, `focus` y `click`
+- abrir panel de debug
+
+## Datos y crecimiento
+
+Archivos base:
+
+- `src/data/signs.json`
+- `src/data/phrases.json`
+- `src/data/alphabet.json`
+- `src/data/transitions.json`
+- `src/data/poseLibrary.ts`
+
+Cada entrada puede declarar ids, tags, dominio, duración, pose base, transiciones y metadata.
+
+### Agregar una pose
+
+1. Ejecuta `npm run scaffold:pose -- NEW_POSE_ID`
+2. Abre `src/data/poseLibrary.ts`
+3. Completa el snippet generado con huesos, tags y descripción
+4. Prueba la pose en `/dev/pose-library`
+
+### Agregar una seña
+
+1. Ejecuta `npm run scaffold:sign -- NEW_SIGN_ID`
+2. Ajusta la nueva entrada en `src/data/signs.json`
+3. Si requiere frase exacta, añade un match en `src/data/phrases.json`
+4. Si necesita deletreo, verifica `src/data/alphabet.json`
+5. Prueba el resultado en la landing o en `/dev/pose-library`
+
+### Agregar una frase
+
+1. Crea un nuevo objeto en `src/data/phrases.json`
+2. Define `normalized`, `signIds`, `intent`, `domain` y `tags`
+3. Verifica que los `signIds` existan en `src/data/signs.json`
+
+## Qué es placeholder hoy
+
+- Las poses y secuencias iniciales son placeholders funcionales de demo.
+- El fallback de fingerspelling usa poses placeholder por letra.
+- No se afirma que las señas actuales sean una traducción final validada por expertos LSC.
+
+## Fase 2 sugerida
+
+- biblioteca validada de señas LSC con revisión experta
+- clips reales y/o blend trees por seña
+- adaptador externo para LLM o motor semántico más rico
+- sincronía facial y non-manual markers
+- analítica persistida y authoring UI para curación de contenido
+
+## Legacy
+
+El flujo anterior de tracking humano quedó aislado conceptualmente en `src/legacy/README.md`. Lo reutilizable para la nueva demo fue el stack VRM/Three.
+
+## Scripts
+
+- `npm run dev`
+- `npm run build`
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test`
+- `npm run scaffold:sign -- NEW_SIGN_ID`
+- `npm run scaffold:pose -- NEW_POSE_ID`

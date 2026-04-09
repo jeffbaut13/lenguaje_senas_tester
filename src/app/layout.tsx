@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VRM Human Tracking Lab",
-  description: "Next.js client-side webcam tracking with Human, Three.js and VRM retargeting.",
+  title: "Contexto LSC Demo",
+  description: "Demo funcional de accesibilidad con captura semántica del DOM y avatar VRM para reproducción contextual.",
 };
 
 export default function RootLayout({
