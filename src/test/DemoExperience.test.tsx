@@ -1,5 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import PoseCapturePage from "@/app/dev/pose-capture/page";
+import PoseLibraryPage from "@/app/dev/pose-library/page";
 import { HoverCaptureProvider } from "@/components/translator/HoverCaptureProvider";
 import { DemoExperience } from "@/components/translator/DemoExperience";
 import { useTranslationContext } from "@/lib/state/TranslationContext";
@@ -26,7 +28,7 @@ describe("DemoExperience", () => {
   it("renderiza la landing y el widget/avatar", () => {
     render(<DemoExperience />);
 
-    expect(screen.getByText(/Traduce el contenido del sitio con un avatar accesible y contextual/i)).toBeInTheDocument();
+    expect(screen.getByText(/Accesibilidad digital con traduccion contextual en LSC/i)).toBeInTheDocument();
     expect(screen.getByText(/Contexto LSC/i)).toBeInTheDocument();
     expect(screen.getByTestId("avatar-canvas")).toBeInTheDocument();
   });
@@ -36,23 +38,23 @@ describe("DemoExperience", () => {
       <HoverCaptureProvider>
         <section>
           <h2 data-semantic-scope="block" data-translate="block">
-            Solicitar implementación
+            Solicitar implementacion
           </h2>
         </section>
         <Inspector />
       </HoverCaptureProvider>,
     );
 
-    fireEvent.click(screen.getByText("Solicitar implementación"));
+    fireEvent.click(screen.getByText("Solicitar implementacion"));
 
     await waitFor(() => {
-      expect(screen.getByTestId("active-text")).toHaveTextContent("Solicitar implementación");
+      expect(screen.getByTestId("active-text")).toHaveTextContent("Solicitar implementacion");
       expect(Number(screen.getByTestId("sign-count").textContent)).toBeGreaterThan(0);
       expect(Number(screen.getByTestId("play-count").textContent)).toBeGreaterThan(0);
     });
   });
 
-  it("reemplaza la reproducción actual cuando cambia el bloque activo", async () => {
+  it("reemplaza la reproduccion actual cuando cambia el bloque activo", async () => {
     render(
       <HoverCaptureProvider>
         <div>
@@ -72,5 +74,15 @@ describe("DemoExperience", () => {
 
     fireEvent.click(screen.getByText("Hablar con soporte"));
     await waitFor(() => expect(screen.getByTestId("active-text")).toHaveTextContent("Hablar con soporte"));
+  });
+
+  it("renderiza la pagina dev de pose library", () => {
+    render(<PoseLibraryPage />);
+    expect(screen.getByText(/Pose library y secuencias de demo/i)).toBeInTheDocument();
+  });
+
+  it("renderiza la pagina dev de pose capture", () => {
+    render(<PoseCapturePage />);
+    expect(screen.getByText(/Captura de poses desde tres videos/i)).toBeInTheDocument();
   });
 });

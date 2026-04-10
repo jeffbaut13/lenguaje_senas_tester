@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "scaffold:sign": "node --import tsx scripts/scaffold-sign.ts",
-    "scaffold:pose": "node --import tsx scripts/scaffold-pose.ts"
+    "scaffold:pose": "node --import tsx scripts/scaffold-pose.ts",
+    "import:pose-from-video": "node --import tsx scripts/import-pose-from-video.ts"
   },
   "dependencies": {
     "@pixiv/three-vrm": "^3.5.1",

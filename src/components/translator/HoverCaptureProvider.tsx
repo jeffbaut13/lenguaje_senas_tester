@@ -68,6 +68,28 @@ export function HoverCaptureProvider({ children }: { children: React.ReactNode }
   }, [controller, speed]);
 
   useEffect(() => {
+    const handlePointerMove = (event: Event) => {
+      if (triggerMode !== "hover") {
+        return;
+      }
+
+      const target = event.target instanceof HTMLElement ? event.target : null;
+      if (target) {
+        captureTextFromElement(target);
+      }
+    };
+
+    const handleFocus = (event: Event) => {
+      if (triggerMode !== "focus") {
+        return;
+      }
+
+      const target = event.target instanceof HTMLElement ? event.target : null;
+      if (target) {
+        captureTextFromElement(target, true);
+      }
+    };
+
     const handleClick = (event: Event) => {
       if (triggerMode !== "click") {
         return;
@@ -78,9 +100,13 @@ export function HoverCaptureProvider({ children }: { children: React.ReactNode }
       }
     };
 
+    document.addEventListener("pointermove", handlePointerMove, true);
+    document.addEventListener("focusin", handleFocus, true);
     document.addEventListener("click", handleClick, true);
 
     return () => {
+      document.removeEventListener("pointermove", handlePointerMove, true);
+      document.removeEventListener("focusin", handleFocus, true);
       document.removeEventListener("click", handleClick, true);
     };
   }, [captureTextFromElement, triggerMode]);

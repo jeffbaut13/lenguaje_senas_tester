@@ -1,86 +1,103 @@
 # Contexto LSC Demo
 
-Demo funcional de accesibilidad para sitios web con captura contextual del DOM, planificación semántica local y reproducción visual en un avatar VRM flotante.
+Base de producto para accesibilidad digital con traduccion contextual en LSC usando avatar VRM. El proyecto ya no esta orientado a webcam ni tracking humano en vivo como experiencia principal.
 
-## Qué cambió
+## Vision
 
-Este repositorio ya no está orientado a webcam, pose tracking humano ni MediaPipe como flujo principal. La experiencia principal ahora sigue esta cadena:
+El producto principal sigue este flujo:
 
-`DOM/texto -> semanticPlan -> signPlan -> playPlan -> avatar`
+`DOM/texto -> semanticPlan -> signPlan -> playPlan -> avatar VRM`
 
-La demo abre sin pedir permisos del navegador y responde a `hover`, `focus` o `click` sobre títulos, párrafos cortos, chips y CTAs relevantes.
+La demo captura bloques semanticos del DOM, normaliza el texto, construye planes internos depurables y reproduce poses o micro-secuencias en un widget flotante.
+
+En paralelo, el repo ahora incluye un segundo flujo interno de authoring:
+
+`3 videos de referencia -> extraccion de landmarks -> keyframes -> candidate pose -> staging`
+
+Ese flujo sirve para acelerar la creacion de nuevas poses sin volver el runtime del producto una app de camara.
+
+## Que cambia respecto al laboratorio anterior
+
+- El runtime principal no pide permisos de camara.
+- El runtime principal no depende de webcam ni landmarks en vivo.
+- Human y el tracking antiguo quedan aislados como toolkit de authoring interno.
+- El avatar no recibe coordenadas crudas desde IA o tracking en el flujo principal.
+- La reproduccion sigue usando assets internos controlados: poses, secuencias, transitions y fallback de fingerspelling.
 
 ## Arquitectura
 
-### 1. DOM capture layer
+### Runtime principal
 
-- `src/lib/dom/findSemanticContainer.ts`
-- `src/lib/dom/extractSemanticTextFromElement.ts`
+1. DOM capture layer
+   - `src/lib/dom/findSemanticContainer.ts`
+   - `src/lib/dom/extractSemanticTextFromElement.ts`
 
-Reconstruye texto aunque esté fragmentado en spans o nodos inline y sube al contenedor semántico más útil.
+2. Normalization y semantic layer
+   - `src/lib/translation/normalizeText.ts`
+   - `src/lib/translation/classifyIntent.ts`
+   - `src/lib/translation/extractEntities.ts`
+   - `src/lib/translation/translateTextToSemanticPlan.ts`
 
-### 2. Normalization layer
+3. Sign engine
+   - `src/lib/sign-engine/resolvePhrasePlan.ts`
+   - `src/lib/sign-engine/resolveTokenPlan.ts`
+   - `src/lib/sign-engine/resolveFingerSpellingPlan.ts`
+   - `src/lib/sign-engine/buildSignPlanFromSemanticPlan.ts`
+   - `src/lib/sign-engine/buildPlayPlan.ts`
 
-- `src/lib/translation/normalizeText.ts`
+4. Avatar playback
+   - `src/lib/playback/AvatarPlaybackController.ts`
+   - `src/lib/playback/poseResolver.ts`
+   - `src/components/avatar/AvatarCanvas.tsx`
+   - `src/components/avatar/AvatarWidget.tsx`
 
-Normaliza espacios, minúsculas y diacríticos para matching robusto sin tocar el texto visible.
+### Authoring offline / interno
 
-### 3. Semantic layer
+- `src/app/dev/pose-capture/page.tsx`
+- `src/components/dev/PoseCaptureStudio.tsx`
+- `src/lib/authoring/mediapipeAdapter.ts`
+- `src/lib/authoring/extractPoseFromVideo.ts`
+- `src/lib/authoring/selectKeyPoseFrames.ts`
+- `src/lib/authoring/buildCandidatePose.ts`
+- `src/lib/authoring/saveCandidatePose.ts`
+- `src/app/api/authoring/stage/route.ts`
 
-- `src/lib/translation/translateTextToSemanticPlan.ts`
-- `src/lib/translation/classifyIntent.ts`
-- `src/lib/translation/extractEntities.ts`
-
-Produce `semanticPlan` con `sourceText`, `normalizedText`, `domain`, `intent`, `entities`, `confidence` y notas.
-
-### 4. Sign planning layer
-
-- `src/lib/sign-engine/resolvePhrasePlan.ts`
-- `src/lib/sign-engine/resolveTokenPlan.ts`
-- `src/lib/sign-engine/buildSignPlanFromSemanticPlan.ts`
-
-Prioriza:
-
-1. frase conocida
-2. match por intención
-3. tokens útiles
-4. fallback de fingerspelling
-
-### 5. Playback layer
-
-- `src/lib/sign-engine/buildPlayPlan.ts`
-- `src/lib/playback/AvatarPlaybackController.ts`
-
-Convierte el `signPlan` a una cola con pasos `pose`, `transition`, `pause` y `fingerspell`, soportando reemplazo limpio de reproducción.
-
-### 6. Avatar execution layer
-
-- `src/components/avatar/AvatarCanvas.tsx`
-- `src/lib/playback/poseResolver.ts`
-- `src/lib/vrm/*`
-
-Reutiliza la carga VRM y el rig del laboratorio anterior. La reproducción actual es procedural y placeholder, con `AnimationMixer` ya montado para futuras capas de clips reales.
-
-## Landing y páginas
+## Paginas clave
 
 - `/`
-  Landing demo original, desktop-first, inspirada en composición editorial premium con tonos gris claro, crema y acento naranja cálido.
+  Landing demo principal con cards editoriales y widget/avatar flotante.
 - `/dev/pose-library`
-  Página interna para revisar poses, probar texto libre y ver `semanticPlan`, `signPlan` y `playPlan`.
+  Inspeccion visual de poses, semanticPlan, signPlan y playPlan.
+- `/dev/pose-capture`
+  Flujo interno para subir tres videos, extraer keyframes y guardar candidate poses en staging.
 
-## Controles de la demo
+## Como correr la demo
 
-El widget flotante permite:
+```bash
+npm install
+npm run dev
+```
 
-- abrir/cerrar overlay
-- `play`, `stop`, `reset`
-- cambiar velocidad
-- alternar trigger mode entre `hover`, `focus` y `click`
-- abrir panel de debug
+Abre `http://localhost:3000`.
 
-## Datos y crecimiento
+### Que deberias ver
 
-Archivos base:
+- Una landing clara y calida con acento naranja.
+- Un widget/avatar flotante a la derecha.
+- Textos, botones y tarjetas marcados para traduccion contextual.
+- El avatar reaccionando a `hover`, `focus` o `click` segun el trigger seleccionado.
+- Un panel debug opcional para inspeccionar `semanticPlan`, `signPlan`, `playPlan` y playback.
+
+## Como usar la landing
+
+1. Abre el widget si esta colapsado.
+2. Cambia el trigger entre `hover`, `focus` o `click`.
+3. Interactua con titulos, parrafos cortos, chips o CTAs.
+4. El sistema detecta el bloque, construye los planes y reemplaza limpiamente la reproduccion actual.
+
+## Pose library
+
+Datos principales:
 
 - `src/data/signs.json`
 - `src/data/phrases.json`
@@ -88,48 +105,111 @@ Archivos base:
 - `src/data/transitions.json`
 - `src/data/poseLibrary.ts`
 
-Cada entrada puede declarar ids, tags, dominio, duración, pose base, transiciones y metadata.
+### Tipos importantes
 
-### Agregar una pose
+- `SemanticPlan`
+- `SignEntry`
+- `PhraseEntry`
+- `AlphabetEntry`
+- `PoseEntry`
+- `CandidatePoseEntry`
+- `TransitionEntry`
+- `PlayStep`
+- `PlaybackSession`
+- `PoseCaptureInput`
+- `PoseCaptureResult`
+- `PoseKeyframeSnapshot`
+
+## Agregar una pose manual
 
 1. Ejecuta `npm run scaffold:pose -- NEW_POSE_ID`
-2. Abre `src/data/poseLibrary.ts`
-3. Completa el snippet generado con huesos, tags y descripción
-4. Prueba la pose en `/dev/pose-library`
+2. Completa la entrada en `src/data/poseLibrary.ts`
+3. Asigna tags, descripcion, duracion y bones
+4. Pruebala en `/dev/pose-library`
 
-### Agregar una seña
+## Agregar una sena o frase
 
 1. Ejecuta `npm run scaffold:sign -- NEW_SIGN_ID`
-2. Ajusta la nueva entrada en `src/data/signs.json`
-3. Si requiere frase exacta, añade un match en `src/data/phrases.json`
-4. Si necesita deletreo, verifica `src/data/alphabet.json`
-5. Prueba el resultado en la landing o en `/dev/pose-library`
+2. Ajusta `src/data/signs.json`
+3. Si necesitas phrase match exacto, agrega entrada en `src/data/phrases.json`
+4. Verifica el fallback en `src/data/alphabet.json`
+5. Prueba en la landing o en `/dev/pose-library`
 
-### Agregar una frase
+## Capturar una pose desde 3 videos
 
-1. Crea un nuevo objeto en `src/data/phrases.json`
-2. Define `normalized`, `signIds`, `intent`, `domain` y `tags`
-3. Verifica que los `signIds` existan en `src/data/signs.json`
+La herramienta interna espera tres videos de la misma pose o micro-secuencia:
 
-## Qué es placeholder hoy
+- `front`
+- `threeQuarter`
+- `side`
 
-- Las poses y secuencias iniciales son placeholders funcionales de demo.
-- El fallback de fingerspelling usa poses placeholder por letra.
-- No se afirma que las señas actuales sean una traducción final validada por expertos LSC.
+### Flujo
 
-## Fase 2 sugerida
+1. Ve a `/dev/pose-capture`
+2. Sube los 3 videos
+3. Ejecuta `Procesar videos`
+4. Revisa keyframes `start`, `middle`, `end`
+5. Inspecciona la `candidate pose`
+6. Asigna `id`, tags y notas
+7. Guarda en staging
 
-- biblioteca validada de señas LSC con revisión experta
-- clips reales y/o blend trees por seña
-- adaptador externo para LLM o motor semántico más rico
-- sincronía facial y non-manual markers
-- analítica persistida y authoring UI para curación de contenido
+El resultado se escribe en:
 
-## Legacy
+- `src/data/poseStaging/<POSE_ID>.json`
 
-El flujo anterior de tracking humano quedó aislado conceptualmente en `src/legacy/README.md`. Lo reutilizable para la nueva demo fue el stack VRM/Three.
+### Import script
 
-## Scripts
+Tambien puedes importar un candidate file ya generado:
+
+```bash
+npm run import:pose-from-video -- path/to/candidate-pose.json
+```
+
+## Promover una pose desde staging
+
+Ruta sugerida hoy:
+
+1. Captura o importa la pose a `src/data/poseStaging/`
+2. Revisa `normalizedLandmarks` y `suggestedPoseDescriptor`
+3. Ajusta manualmente el descriptor final para evitar aplicar landmarks crudos
+4. Crea o actualiza la entrada estable en `src/data/poseLibrary.ts`
+5. Conecta la pose a `signs.json`, `phrases.json` o reglas semanticas
+6. Valida en `/dev/pose-library` y en la landing
+
+## Legacy y frontera actual
+
+El runtime principal ya no depende de:
+
+- `src/hooks/useCamera.ts`
+- `src/hooks/useAvatarTracking.ts`
+- `src/lib/tracking/*`
+- `src/components/CameraPanel.tsx`
+- `src/components/ControlPanel.tsx`
+- `src/components/DebugOverlay.tsx`
+- `src/components/MetricsPanel.tsx`
+- `src/components/LogPanel.tsx`
+- `src/components/AppShell.tsx`
+- `src/components/ClientOnlyAppShell.tsx`
+
+El paquete `@vladmandic/human` se conserva solo para el flujo interno de authoring y no para el producto principal.
+
+## Placeholders actuales
+
+- Las poses y micro-secuencias siguen siendo placeholders funcionales de demo.
+- El fallback de fingerspelling usa una libreria inicial procedural.
+- La captura desde video no promete motion capture perfecto ni traduccion final validada de LSC.
+- La pose candidata requiere revision antes de entrar a produccion.
+
+## Fase siguiente sugerida
+
+- Libreria validada de senas con revision experta de LSC
+- Mayor cobertura de frases y dominios
+- Clips reales o blend trees por sena
+- Mejor normalizacion entre distintos avatares VRM
+- Herramienta de promocion desde staging a pose library estable
+- Non-manual markers y expresividad facial
+
+## Scripts utiles
 
 - `npm run dev`
 - `npm run build`
@@ -138,3 +218,4 @@ El flujo anterior de tracking humano quedó aislado conceptualmente en `src/lega
 - `npm run test`
 - `npm run scaffold:sign -- NEW_SIGN_ID`
 - `npm run scaffold:pose -- NEW_POSE_ID`
+- `npm run import:pose-from-video -- path/to/candidate-pose.json`

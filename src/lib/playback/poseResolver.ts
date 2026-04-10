@@ -6,13 +6,17 @@ const boneNameMap: Record<string, VRMHumanBoneName> = {
   Chest: VRMHumanBoneName.Chest,
   Head: VRMHumanBoneName.Head,
   LeftHand: VRMHumanBoneName.LeftHand,
+  LeftIndexDistal: VRMHumanBoneName.LeftIndexDistal,
   LeftIndexIntermediate: VRMHumanBoneName.LeftIndexIntermediate,
   LeftIndexProximal: VRMHumanBoneName.LeftIndexProximal,
+  LeftLittleDistal: VRMHumanBoneName.LeftLittleDistal,
   LeftLittleIntermediate: VRMHumanBoneName.LeftLittleIntermediate,
   LeftLittleProximal: VRMHumanBoneName.LeftLittleProximal,
   LeftLowerArm: VRMHumanBoneName.LeftLowerArm,
+  LeftMiddleDistal: VRMHumanBoneName.LeftMiddleDistal,
   LeftMiddleIntermediate: VRMHumanBoneName.LeftMiddleIntermediate,
   LeftMiddleProximal: VRMHumanBoneName.LeftMiddleProximal,
+  LeftRingDistal: VRMHumanBoneName.LeftRingDistal,
   LeftRingIntermediate: VRMHumanBoneName.LeftRingIntermediate,
   LeftRingProximal: VRMHumanBoneName.LeftRingProximal,
   LeftShoulder: VRMHumanBoneName.LeftShoulder,
@@ -22,13 +26,17 @@ const boneNameMap: Record<string, VRMHumanBoneName> = {
   LeftUpperArm: VRMHumanBoneName.LeftUpperArm,
   Neck: VRMHumanBoneName.Neck,
   RightHand: VRMHumanBoneName.RightHand,
+  RightIndexDistal: VRMHumanBoneName.RightIndexDistal,
   RightIndexIntermediate: VRMHumanBoneName.RightIndexIntermediate,
   RightIndexProximal: VRMHumanBoneName.RightIndexProximal,
+  RightLittleDistal: VRMHumanBoneName.RightLittleDistal,
   RightLittleIntermediate: VRMHumanBoneName.RightLittleIntermediate,
   RightLittleProximal: VRMHumanBoneName.RightLittleProximal,
   RightLowerArm: VRMHumanBoneName.RightLowerArm,
+  RightMiddleDistal: VRMHumanBoneName.RightMiddleDistal,
   RightMiddleIntermediate: VRMHumanBoneName.RightMiddleIntermediate,
   RightMiddleProximal: VRMHumanBoneName.RightMiddleProximal,
+  RightRingDistal: VRMHumanBoneName.RightRingDistal,
   RightRingIntermediate: VRMHumanBoneName.RightRingIntermediate,
   RightRingProximal: VRMHumanBoneName.RightRingProximal,
   RightShoulder: VRMHumanBoneName.RightShoulder,
@@ -44,8 +52,12 @@ export const resolvePoseRotations = (poseId: string) => {
     return new Map<VRMHumanBoneName, Quaternion>();
   }
 
+  return resolvePoseRotationsFromBones(pose.bones);
+};
+
+export const resolvePoseRotationsFromBones = (bones: Record<string, [number, number, number]>) => {
   const rotations = new Map<VRMHumanBoneName, Quaternion>();
-  Object.entries(pose.bones).forEach(([boneName, euler]) => {
+  Object.entries(bones).forEach(([boneName, euler]) => {
     const vrmBoneName = boneNameMap[boneName];
     if (!vrmBoneName) {
       return;
@@ -56,4 +68,20 @@ export const resolvePoseRotations = (poseId: string) => {
   });
 
   return rotations;
+};
+
+export const resolvePoseRotationsWithOverride = (
+  poseId: string,
+  overrideBones?: Record<string, [number, number, number]>,
+) => {
+  if (overrideBones) {
+    return resolvePoseRotationsFromBones(overrideBones);
+  }
+
+  const pose = getPoseEntry(poseId);
+  if (!pose) {
+    return new Map<VRMHumanBoneName, Quaternion>();
+  }
+
+  return resolvePoseRotationsFromBones(pose.bones);
 };

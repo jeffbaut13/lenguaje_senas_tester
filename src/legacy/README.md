@@ -2,7 +2,7 @@
 
 Este directorio documenta el flujo anterior del proyecto, centrado en webcam, Human, tracking de landmarks y retargeting experimental.
 
-Código legacy a aislar del producto demo actual:
+Codigo legacy que debe quedar fuera del runtime principal:
 
 - `src/hooks/useCamera.ts`
 - `src/hooks/useAvatarTracking.ts`
@@ -17,11 +17,19 @@ Código legacy a aislar del producto demo actual:
 - `src/components/AppShell.tsx`
 - `src/components/ClientOnlyAppShell.tsx`
 
-Piezas reutilizadas en la nueva demo:
+Piezas reutilizadas en la demo actual:
 
 - `src/lib/vrm/loadVRM.ts`
 - `src/lib/vrm/restPose.ts`
 - `src/lib/vrm/vrmBones.ts`
 - `src/lib/vrm/vrmRig.ts`
 
-La experiencia principal ya no usa permisos del navegador ni tracking humano. El foco es `DOM/texto -> semanticPlan -> signPlan -> playPlan -> avatar`.
+Pieza legacy que hoy sigue viva solo para authoring:
+
+- `@vladmandic/human` a traves de `src/lib/authoring/mediapipeAdapter.ts`
+
+La experiencia principal del producto sigue:
+
+`DOM/texto -> semanticPlan -> signPlan -> playPlan -> avatar`
+
+La captura desde video es un toolkit interno y no una dependencia del runtime productivo.

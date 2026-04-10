@@ -87,17 +87,38 @@ export interface TransitionEntry {
   };
 }
 
-export interface PoseEntry {
+export interface PoseDescriptor {
+  bones: Record<string, [number, number, number]>;
+  emphasis?: number;
+}
+
+export interface HandPresetEntry {
   id: string;
   label: string;
   description: string;
+  bones: Record<string, [number, number, number]>;
+  tags: string[];
+}
+
+export interface PoseEntry {
+  id: string;
+  label: string;
+  type?: "base_pose" | "micro_sequence" | "fingerspell" | "transition";
+  description: string;
   durationMs: number;
   tags: string[];
+  domainTags?: string[];
+  signTags?: string[];
   emphasis: number;
   bones: Record<string, [number, number, number]>;
+  targetDescriptor?: PoseDescriptor;
+  playbackStrategy?: "procedural" | "clip" | "hybrid";
+  source?: "manual" | "captured_from_video" | "hybrid";
+  stagingRef?: string;
   metadata?: {
     placeholder?: boolean;
     category?: string;
+    notes?: string;
   };
 }
 
@@ -147,4 +168,64 @@ export interface PlaybackSnapshot {
   activeToken?: string;
   speed: number;
   queueLength: number;
+}
+
+export interface PlaybackSession {
+  id: string;
+  plan: PlayPlan;
+  status: PlaybackSnapshot["status"];
+  startedAt: number;
+  speed: number;
+}
+
+export interface PoseCaptureInput {
+  angle: "front" | "threeQuarter" | "side";
+  fileName: string;
+  mimeType: string;
+  durationMs: number;
+  width: number;
+  height: number;
+}
+
+export interface PoseLandmarkPoint {
+  x: number;
+  y: number;
+  z: number;
+  visibility: number;
+}
+
+export interface PoseKeyframeSnapshot {
+  label: "start" | "middle" | "end";
+  timeMs: number;
+  angle: PoseCaptureInput["angle"];
+  landmarks: Record<string, PoseLandmarkPoint>;
+  sourceFrame: number;
+}
+
+export interface PoseCaptureResult {
+  sourceVideos: PoseCaptureInput[];
+  extractedAt: string;
+  keyframes: {
+    start: PoseKeyframeSnapshot[];
+    middle: PoseKeyframeSnapshot[];
+    end: PoseKeyframeSnapshot[];
+  };
+  notes: string[];
+}
+
+export interface CandidatePoseEntry {
+  id: string;
+  sourceVideos: PoseCaptureInput[];
+  captureMode: "triple_video_authoring";
+  extractedAt: string;
+  keyframes: {
+    start: PoseKeyframeSnapshot[];
+    middle: PoseKeyframeSnapshot[];
+    end: PoseKeyframeSnapshot[];
+  };
+  normalizedLandmarks: Record<string, PoseLandmarkPoint>;
+  suggestedPoseDescriptor: PoseDescriptor;
+  tags: string[];
+  notes: string[];
+  reviewStatus: "draft" | "reviewed" | "promoted";
 }

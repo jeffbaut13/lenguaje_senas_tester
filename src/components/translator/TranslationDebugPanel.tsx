@@ -15,24 +15,24 @@ export function TranslationDebugPanel() {
         <span className="signal-dot" />
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Debug pipeline</p>
-          <p className="text-sm text-[var(--muted)]">Inspección rápida de planes y estado del playback.</p>
+          <p className="text-sm text-[var(--muted)]">Inspeccion rapida de planes y estado del playback.</p>
         </div>
       </div>
 
       <div className="space-y-4 text-sm">
-        <section className="rounded-3xl bg-[rgba(255,248,239,0.9)] p-4">
+        <section className="rounded-3xl bg-[rgba(255,249,240,0.9)] p-4">
           <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Playback</h3>
           <pre>{JSON.stringify(playbackSnapshot, null, 2)}</pre>
         </section>
-        <section className="rounded-3xl bg-[rgba(255,248,239,0.9)] p-4">
+        <section className="rounded-3xl bg-[rgba(255,249,240,0.9)] p-4">
           <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">semanticPlan</h3>
           <pre>{JSON.stringify(semanticPlan, null, 2)}</pre>
         </section>
-        <section className="rounded-3xl bg-[rgba(255,248,239,0.9)] p-4">
+        <section className="rounded-3xl bg-[rgba(255,249,240,0.9)] p-4">
           <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">signPlan</h3>
           <pre>{JSON.stringify(signPlan, null, 2)}</pre>
         </section>
-        <section className="rounded-3xl bg-[rgba(255,248,239,0.9)] p-4">
+        <section className="rounded-3xl bg-[rgba(255,249,240,0.9)] p-4">
           <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">playPlan</h3>
           <pre>{JSON.stringify(playPlan, null, 2)}</pre>
         </section>
